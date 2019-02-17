@@ -1,0 +1,42 @@
+// The Full-Guide is on: https://www.pyimagesearch.com/2017/12/04/how-to-create-a-deep-learning-dataset-using-google-images/
+// required packages are in requirements.txt
+
+// Open Chrome Browser and scroll down some images
+// Navigate View/Developer/JavaScriptConsole
+// Sequentially paste and execute the following code:
+
+// Injecting j query
+javascript: (function(e, s) {
+    e.src = s;
+    e.onload = function() {
+        jQuery.noConflict();
+        console.log('jQuery injected');
+    };
+    document.head.appendChild(e);
+})(document.createElement('script'), '//code.jquery.com/jquery-latest.min.js')
+
+// Pull down query into JavaScript console 
+var script = document.createElement('script');
+script.src = "https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js";
+
+// You might need to paste this line twice
+document.getElementsByTagName('head')[0].appendChild(script);
+
+// Grab URLs
+var urls = jQuery('.rg_di .rg_meta').map(function() { return JSON.parse(jQuery(this).text()).ou; });
+
+// Write the URLs to file  urls.txt (one per line)
+var textToSave = urls.toArray().join('\n');
+var hiddenElement = document.createElement('a');
+hiddenElement.href = 'data:attachment/text,' + encodeURI(textToSave);
+hiddenElement.target = '_blank';
+hiddenElement.download = 'urls.txt';
+hiddenElement.click();
+
+// the urls.txt will be saved in your default downloads dir
+// copy the file to the directory of “download_images.py”, make sure that the name is “urls.txt”
+// execute file from terminal: 
+head -n 2 download_images.py
+
+// next specify url file and image directory (assuming there is a images/mug path):
+python download_images.py --urls urls.txt --output images/mug
